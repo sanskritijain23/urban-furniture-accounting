@@ -12,7 +12,7 @@ class PurchaseOrderLineCreate(BaseModel):
     analytic_account_id: Optional[int] = None
     qty: Decimal
     unit_price: Decimal
-    # total is computed server-side as qty * unit_price — TODO in purchase_service.py
+    # total is computed server-side (qty * unit_price) in purchase_service.create_purchase_order
 
 
 class PurchaseOrderLineResponse(ORMBase):
@@ -38,3 +38,9 @@ class PurchaseOrderResponse(ORMBase):
     po_date: date
     status: DocumentStatus
     lines: List[PurchaseOrderLineResponse] = []
+
+
+class PurchaseOrderConfirmResponse(PurchaseOrderResponse):
+    """Returned only from POST /purchase-orders/{id}/confirm. Budget
+    warnings are informational and NEVER block confirmation."""
+    budget_warnings: List[str] = []

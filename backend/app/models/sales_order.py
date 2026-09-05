@@ -1,15 +1,3 @@
-"""
-Sales Order + SalesOrderLine.
-
-IMPORTANT (audited rule): confirming a Sales Order does NOT create
-any Journal Entry. An SO is a commitment only; accounting impact only
-begins at Customer Invoice confirmation.
-
-so_no is auto-generated (format: SO00001) by
-app/services/sequence_service.py.
-
-Owned by: Database Developer.
-"""
 from sqlalchemy import Column, Integer, String, Numeric, Enum, ForeignKey, Date, DateTime, func
 from sqlalchemy.orm import relationship
 

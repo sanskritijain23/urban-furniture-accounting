@@ -18,7 +18,7 @@ class ContactBase(BaseModel):
 
 class ContactCreate(ContactBase):
     """Creating a Contact may trigger an auto-created User login with
-    role=contact — handled in the service layer, not here. TODO."""
+    role=contact -- see app.services.contact_service.create_contact."""
     pass
 
 
@@ -35,3 +35,12 @@ class ContactUpdate(BaseModel):
 
 class ContactResponse(ContactBase, ORMBase):
     id: int
+
+
+class ContactCreateResponse(ContactResponse):
+    """Returned only from POST /contacts/. If a contact-role login was
+    auto-provisioned, its one-time credentials are included here so an
+    admin/accountant can relay them to the contact — they are never
+    returned again from GET/list endpoints."""
+    provisioned_login_id: Optional[str] = None
+    temporary_password: Optional[str] = None

@@ -1,17 +1,3 @@
-"""
-Vendor Bill + VendorBillLine.
-
-IMPORTANT (audited rule): confirming a Vendor Bill DOES create a
-Journal Entry via app/services/accounting_engine.py:
-    Debit  Purchase Expense (per line's account)
-    Credit Creditors / Accounts Payable (vendor)
-
-bill_no is auto-generated (format: Bill/2026/0001) by
-app/services/sequence_service.py. `reference` is a separate free-text
-field the user can type in manually (distinct from bill_no).
-
-Owned by: Database Developer.
-"""
 from sqlalchemy import Column, Integer, String, Numeric, Enum, ForeignKey, Date, DateTime, func
 from sqlalchemy.orm import relationship
 
@@ -55,8 +41,6 @@ class VendorBillLine(Base):
     vendor_bill_id = Column(Integer, ForeignKey("vendor_bills.id"), nullable=False)
     product_id = Column(Integer, ForeignKey("products.id"), nullable=False)
 
-    # Defaults to the "Purchase Expense" Chart of Accounts entry;
-    # editable per line.
     account_id = Column(Integer, ForeignKey("accounts.id"), nullable=False)
     analytic_account_id = Column(Integer, ForeignKey("analytic_accounts.id"), nullable=True)
 

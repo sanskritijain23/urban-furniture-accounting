@@ -1,12 +1,3 @@
-"""
-Shared enums for SQLAlchemy models.
-
-These enums are the approved, audited values from the Urban Furniture
-Problem Statement + MVP mockups. Do NOT add/remove values without
-re-checking the source-of-truth mockups (see docs/database-design.md).
-
-Owned by: Database Developer.
-"""
 import enum
 
 

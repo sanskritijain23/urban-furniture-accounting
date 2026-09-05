@@ -1,27 +1,4 @@
-"""
-Payment — settles a VendorBill or CustomerInvoice.
 
-IMPORTANT (audited rule): every confirmed Payment creates its OWN
-Journal Entry via app/services/accounting_engine.py, SEPARATE from the
-Journal Entry created when the Bill/Invoice was confirmed:
-
-    Bill Payment (Send):
-        Debit  Creditors / Accounts Payable
-        Credit Bank or Cash (per payment_via)
-
-    Invoice Payment (Receive):
-        Debit  Bank or Cash (per payment_via)
-        Credit Debtors / Accounts Receivable
-
-`source_type` + `source_id` is a lightweight polymorphic reference
-back to the VendorBill or CustomerInvoice being paid (mirrors the
-pattern used on JournalEntry).
-
-amount defaults to the bill/invoice's remaining Amount Due but is
-user-editable (partial payments allowed -> payment_status = PARTIAL).
-
-Owned by: Database Developer.
-"""
 from sqlalchemy import Column, Integer, String, Numeric, Enum, ForeignKey, Date, DateTime, func
 from sqlalchemy.orm import relationship
 

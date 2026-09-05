@@ -1,12 +1,3 @@
-"""
-Product master + ProductCategory.
-
-ProductCategory is intentionally a lightweight, separate lookup table
-because the MVP mockup shows categories being "created and used on the
-fly" from within the Product form.
-
-Owned by: Database Developer.
-"""
 from sqlalchemy import Column, Integer, String, Numeric, Enum, ForeignKey, DateTime, func
 from sqlalchemy.orm import relationship
 

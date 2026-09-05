@@ -19,7 +19,7 @@ class BudgetCreate(BaseModel):
 class BudgetReviseRequest(BaseModel):
     """Creates a NEW Budget record linked via revision_of_id, per the
     audited Draft -> Confirmed -> Revised -> Cancelled lifecycle.
-    TODO (budget_service.py): implement the actual revision logic."""
+    See app.services.budget_service.revise_budget for the implementation."""
     new_committed_amount: Decimal
 
 

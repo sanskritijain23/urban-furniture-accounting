@@ -47,5 +47,13 @@ class VendorBillResponse(ORMBase):
     payment_status: PaymentStatus
     lines: List[VendorBillLineResponse] = []
 
-    # TODO (report_service.py or a computed property): amount_due =
-    # sum(line.total) - sum(related payments.amount)
+    # Computed (not a stored column) — populated by the route via
+    # payment_service.get_amount_due(). None on plain list responses
+    # where it isn't computed, to avoid N+1 queries at scale.
+    amount_due: Optional[Decimal] = None
+
+
+class VendorBillConfirmResponse(VendorBillResponse):
+    """Returned only from POST /vendor-bills/{id}/confirm. Budget
+    warnings are informational and NEVER block confirmation."""
+    budget_warnings: List[str] = []

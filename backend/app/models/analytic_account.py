@@ -1,11 +1,3 @@
-"""
-Analytic Account — a financial marker used to group income/expense by
-project, department, or business unit. Assigned per LINE ITEM on PO /
-SO / Vendor Bill / Customer Invoice (audited requirement), and
-referenced by Budget for planned-vs-actual tracking.
-
-Owned by: Database Developer.
-"""
 from sqlalchemy import Column, Integer, String, Enum, DateTime, func
 from sqlalchemy.orm import relationship
 
