@@ -1,9 +1,9 @@
-// TODO: reusable labeled input wrapper used across master/transaction forms.
-export default function FormField({ label, children }) {
+export default function FormField({ label, htmlFor, error, children }) {
   return (
     <div className="form-field">
-      <label>{label}</label>
+      <label htmlFor={htmlFor}>{label}</label>
       {children}
+      {error && <div className="form-field-error">{error}</div>}
     </div>
   )
 }

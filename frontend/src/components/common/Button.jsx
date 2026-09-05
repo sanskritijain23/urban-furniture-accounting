@@ -1,4 +1,11 @@
-// TODO: shared button component (variants: primary/secondary/danger).
-export default function Button({ children, ...props }) {
-  return <button {...props}>{children}</button>
+export default function Button({ children, variant = 'primary', block = false, className = '', ...props }) {
+  const classes = ['btn', `btn-${variant}`, block ? 'btn-block' : '', className]
+    .filter(Boolean)
+    .join(' ')
+
+  return (
+    <button className={classes} {...props}>
+      {children}
+    </button>
+  )
 }
