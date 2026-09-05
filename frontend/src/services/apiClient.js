@@ -4,8 +4,7 @@
 const BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:8000/api/v1'
 
 function getToken() {
-  // TODO: read from wherever auth token is stored (see hooks/useAuth.js)
-  return null
+  return localStorage.getItem('ufa_token')
 }
 
 async function request(path, options = {}) {
