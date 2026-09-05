@@ -7,6 +7,30 @@ function getToken() {
   return localStorage.getItem('ufa_token')
 }
 
+// FastAPI validation errors come back as:
+//   { "detail": [ { "loc": [...], "msg": "...", "type": "..." }, ... ] }
+// or, for non-validation errors, simply { "detail": "some string" }.
+// This turns either shape into one readable line instead of the raw
+// JSON blob previously shown to the user.
+function formatErrorDetail(bodyText) {
+  try {
+    const parsed = JSON.parse(bodyText)
+    const detail = parsed?.detail
+    if (typeof detail === 'string') return detail
+    if (Array.isArray(detail)) {
+      return detail
+        .map((item) => {
+          const field = Array.isArray(item.loc) ? item.loc.at(-1) : null
+          return field ? `${field}: ${item.msg}` : item.msg
+        })
+        .join('; ')
+    }
+  } catch {
+    // Not JSON (or no `detail` key) — fall through to the raw text.
+  }
+  return bodyText
+}
+
 async function request(path, options = {}) {
   const token = getToken()
   const headers = {
@@ -16,8 +40,8 @@ async function request(path, options = {}) {
   }
   const res = await fetch(`${BASE_URL}${path}`, { ...options, headers })
   if (!res.ok) {
-    // TODO: standardize error handling/toast notifications
-    throw new Error(`API error ${res.status}: ${await res.text()}`)
+    const bodyText = await res.text()
+    throw new Error(formatErrorDetail(bodyText) || `API error ${res.status}`)
   }
   if (res.status === 204) return null
   return res.json()
