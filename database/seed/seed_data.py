@@ -20,8 +20,14 @@ from app.models.contact import Contact  # noqa: E402
 from app.models.product import Product, ProductCategory  # noqa: E402
 from app.models.account import Account  # noqa: E402
 from app.models.journal import Journal  # noqa: E402
-from app.models.enums import (  # noqa: E402
-    ContactType, ProductType, AccountType, AccountStatus, JournalType,
+from app.models.analytic_account import AnalyticAccount
+from app.models.enums import (
+    ContactType,
+    ProductType,
+    AccountType,
+    AccountStatus,
+    JournalType,
+    AnalyticAccountType,
 )
 
 
@@ -66,6 +72,32 @@ def seed_journals(db, accounts):
         db.add(Journal(name=name, type=j_type, default_account_id=default_account.id))
 
 
+def seed_analytic_accounts(db):
+    """Seed basic analytic accounts for income and expense tracking."""
+    
+    analytic_accounts = [
+        ("Sales Analytics", AnalyticAccountType.INCOME),
+        ("Purchase Analytics", AnalyticAccountType.EXPENSE),
+    ]
+
+    for name, account_type in analytic_accounts:
+        existing = (
+            db.query(AnalyticAccount)
+            .filter_by(name=name)
+            .first()
+        )
+
+        if existing:
+            continue
+
+        db.add(
+            AnalyticAccount(
+                name=name,
+                type=account_type
+            )
+        )
+
+
 def seed_contacts(db):
     """Demo contacts, matching the PS's worked example exactly."""
     contacts = [
@@ -101,17 +133,24 @@ def seed_products(db):
 
 def run():
     db = SessionLocal()
+
     try:
         accounts = seed_chart_of_accounts(db)
+
         seed_journals(db, accounts)
         seed_contacts(db)
         seed_products(db)
+        seed_analytic_accounts(db)
+
         db.commit()
+
         print("Seed data inserted successfully.")
+
     except Exception as exc:
         db.rollback()
         print(f"Seed failed: {exc}")
         raise
+
     finally:
         db.close()
 

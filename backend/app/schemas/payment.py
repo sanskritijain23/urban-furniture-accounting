@@ -16,8 +16,7 @@ class PaymentCreate(BaseModel):
     note: Optional[str] = None
     source_type: JournalEntrySourceType  # VENDOR_BILL or CUSTOMER_INVOICE
     source_id: int
-    # TODO (payment_service.py): validate source_type is one of the
-    # two allowed values, and that amount > 0.
+    # source_type/amount validated in payment_service.create_payment
 
 
 class PaymentResponse(ORMBase):

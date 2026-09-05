@@ -9,8 +9,9 @@ Complexity rule (audited from MVP sign-up form):
 """
 import re
 
-# from passlib.context import CryptContext
-# pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
+from passlib.context import CryptContext
+
+pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
 PASSWORD_COMPLEXITY_REGEX = re.compile(
     r"^(?=.*[a-z])(?=.*[A-Z])(?=.*[^A-Za-z0-9]).{8,}$"
@@ -18,13 +19,11 @@ PASSWORD_COMPLEXITY_REGEX = re.compile(
 
 
 def hash_password(plain_password: str) -> str:
-    """TODO: return pwd_context.hash(plain_password)."""
-    raise NotImplementedError
+    return pwd_context.hash(plain_password)
 
 
 def verify_password(plain_password: str, hashed_password: str) -> bool:
-    """TODO: return pwd_context.verify(plain_password, hashed_password)."""
-    raise NotImplementedError
+    return pwd_context.verify(plain_password, hashed_password)
 
 
 def is_password_complex(plain_password: str) -> bool:

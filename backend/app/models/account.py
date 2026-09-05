@@ -1,16 +1,3 @@
-"""
-Chart of Accounts (CoA) — the master list of ledger accounts used by
-the centralized Accounting Engine.
-
-IMPORTANT: `type` must use the approved AccountType enum exactly as
-audited from the MVP mockup (Asset / Liability / Bank / Cash / Capital
-/ Income / Expenses / Other Expenses). Do not collapse back to a
-generic 5-value enum.
-
-Owned by: Database Developer. This table should be pre-seeded (see
-database/seed/seed_data.py) with the standard accounts: Cash, Bank,
-Debtors, Creditors, Sales Income, Purchase Expense, Capital.
-"""
 from sqlalchemy import Column, Integer, String, Enum, DateTime, func
 
 from app.core.database import Base

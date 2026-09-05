@@ -1,27 +1,3 @@
-"""
-Budget.
-
-Lifecycle (audited requirement, MUST HAVE):
-    Draft -> Confirmed -> Revised -> Cancelled
-
-Revising a Confirmed budget creates a NEW linked Budget record (does
-not mutate the original in place) — `revision_of_id` is a
-self-referential FK pointing back to the original/previous version.
-
-The following are NOT stored columns — they are computed at read time
-by app/services/budget_service.py from CustomerInvoiceLine /
-VendorBillLine rows sharing the same analytic_account_id within the
-budget's period:
-    - achieved_amount
-    - achieved_percentage  (= achieved_amount / committed_amount * 100)
-    - amount_to_achieve    (= committed_amount - achieved_amount)
-
-Exceeding committed_amount is a NON-BLOCKING warning surfaced at PO /
-Vendor Bill confirmation time (see purchase_service.py), never a hard
-validation error.
-
-Owned by: Database Developer.
-"""
 from sqlalchemy import Column, Integer, String, Numeric, Enum, ForeignKey, Date, DateTime, func
 from sqlalchemy.orm import relationship
 

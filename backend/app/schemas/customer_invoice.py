@@ -46,3 +46,7 @@ class CustomerInvoiceResponse(ORMBase):
     status: DocumentStatus
     payment_status: PaymentStatus
     lines: List[CustomerInvoiceLineResponse] = []
+
+    # Computed (not a stored column) — populated by the route via
+    # payment_service.get_amount_due().
+    amount_due: Optional[Decimal] = None

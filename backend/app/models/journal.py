@@ -1,11 +1,4 @@
-"""
-Journal master — groups transaction types (Sales / Purchase / Bank /
-Cash) and carries a Default Account used by the Accounting Engine to
-pre-fill the offsetting side of a Journal Entry.
 
-Owned by: Database Developer. Should be pre-seeded with the four
-default journals shown in the MVP mockup.
-"""
 from sqlalchemy import Column, Integer, String, Enum, ForeignKey, DateTime, func
 from sqlalchemy.orm import relationship
 

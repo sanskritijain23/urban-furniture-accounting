@@ -1,31 +1,30 @@
-"""
-JWT creation/verification.
 
-Uses app.core.config.settings for SECRET_KEY / ALGORITHM /
-ACCESS_TOKEN_EXPIRE_MINUTES — never hardcode secrets here.
-
-Requires the `python-jose` (or `pyjwt`) package — listed in
-requirements.txt.
-"""
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
 from typing import Optional
+
+from jose import JWTError, jwt
 
 from app.core.config import settings
 
 
+class TokenError(Exception):
+    """Raised when a bearer token is missing, malformed, or expired."""
+
+
 def create_access_token(subject: str, expires_delta: Optional[timedelta] = None) -> str:
-    """
-    TODO:
-      1. Build payload: {"sub": subject, "exp": <expiry>}.
-      2. Encode with jose.jwt.encode(payload, settings.SECRET_KEY,
-         algorithm=settings.ALGORITHM).
-    """
-    raise NotImplementedError
+    expire = datetime.now(timezone.utc) + (
+        expires_delta or timedelta(minutes=settings.ACCESS_TOKEN_EXPIRE_MINUTES)
+    )
+    payload = {
+        "sub": subject,
+        "iat": datetime.now(timezone.utc),
+        "exp": expire,
+    }
+    return jwt.encode(payload, settings.SECRET_KEY, algorithm=settings.ALGORITHM)
 
 
 def decode_access_token(token: str) -> dict:
-    """
-    TODO: jose.jwt.decode(token, settings.SECRET_KEY,
-    algorithms=[settings.ALGORITHM]); raise on invalid/expired token.
-    """
-    raise NotImplementedError
+    try:
+        return jwt.decode(token, settings.SECRET_KEY, algorithms=[settings.ALGORITHM])
+    except JWTError as exc:
+        raise TokenError(str(exc)) from exc
