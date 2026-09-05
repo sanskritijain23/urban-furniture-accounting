@@ -1,24 +1,3 @@
-"""
-JournalEntry + JournalEntryLine — the centralized accounting record.
-
-CRITICAL RULE (see app/services/accounting_engine.py):
-Only accounting_engine.py is permitted to create or post rows in
-these two tables. No other service (purchase, sales, payment, report)
-may write to JournalEntry / JournalEntryLine directly.
-
-A JournalEntry may optionally reference the business transaction that
-triggered it via (source_type, source_id) — a lightweight polymorphic
-reference rather than a formal DB foreign key, since source_type can
-point to different tables (vendor_bills, customer_invoices, payments)
-or be manual with no source at all.
-
-Constraint (enforced in accounting_engine.py, not at the DB layer,
-since it spans multiple rows):
-    SUM(line.debit for line in entry.lines) == SUM(line.credit for line in entry.lines)
-A JournalEntry cannot transition to POSTED unless this holds.
-
-Owned by: Database Developer.
-"""
 from sqlalchemy import (
     Column, Integer, String, Numeric, Enum, ForeignKey, Date, DateTime, func
 )

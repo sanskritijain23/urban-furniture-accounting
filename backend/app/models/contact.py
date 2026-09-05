@@ -1,12 +1,3 @@
-"""
-Contact master (Customer / Vendor / Both).
-
-Creating a Contact may auto-create a linked User with role=contact
-(see docs/workflows.md) so that person can log into the restricted
-Contact Portal and view/pay their own invoices/bills.
-
-Owned by: Database Developer.
-"""
 from sqlalchemy import Column, Integer, String, Enum, DateTime, func
 from sqlalchemy.orm import relationship
 

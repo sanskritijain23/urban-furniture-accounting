@@ -12,8 +12,8 @@ class JournalEntryLineCreate(BaseModel):
     partner_id: Optional[int] = None
     debit: Decimal = Decimal("0")
     credit: Decimal = Decimal("0")
-    # TODO (accounting_engine.py): validate exactly one of debit/credit
-    # is non-zero per line.
+    # Exactly-one-of-debit/credit-per-line is enforced in
+    # accounting_engine.create_journal_entry.
 
 
 class JournalEntryLineResponse(ORMBase):
@@ -26,8 +26,8 @@ class JournalEntryLineResponse(ORMBase):
 
 class ManualJournalEntryCreate(BaseModel):
     """Used by the manual Journal Entry screen (MUST HAVE).
-    TODO (accounting_engine.py): reject if SUM(debit) != SUM(credit)
-    when status is being set to POSTED."""
+    Rejected by accounting_engine.create_journal_entry if SUM(debit) !=
+    SUM(credit) when status is being set to POSTED."""
     journal_id: int
     accounting_date: date
     reference_no: Optional[str] = None
