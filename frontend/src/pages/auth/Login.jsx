@@ -28,8 +28,10 @@ export default function Login() {
 
     setLoading(true)
     try {
-      await login(loginId.trim(), password)
-      navigate('/dashboard')
+      const loggedInUser = await login(loginId.trim(), password)
+      // Contacts land on their own portal; everyone else (admin/accountant)
+      // goes to the regular dashboard.
+      navigate(loggedInUser?.role === 'contact' ? '/portal' : '/dashboard')
     } catch (err) {
       setError(err.message || 'Login failed. Please check your credentials.')
     } finally {
@@ -52,6 +54,7 @@ export default function Login() {
             value={loginId}
             onChange={(e) => setLoginId(e.target.value)}
             autoComplete="username"
+            placeholder="Enter your login ID"
           />
         </FormField>
 
@@ -62,6 +65,7 @@ export default function Login() {
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             autoComplete="current-password"
+            placeholder="Enter your password"
           />
         </FormField>
 

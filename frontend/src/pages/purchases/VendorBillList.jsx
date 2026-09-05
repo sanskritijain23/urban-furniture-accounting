@@ -1,5 +1,7 @@
-// Route: /sales/orders
-// List of Sales Orders with All/Draft/Confirmed filters.
+// Route: /purchases/bills
+// List of Vendor Bills. Bills are only created from a confirmed
+// Purchase Order (see PurchaseOrderForm's "Create Vendor Bill" action),
+// so this list has no standalone "Add" button.
 import { useMemo, useState } from 'react'
 import { Link } from 'react-router-dom'
 import PageShell from '../../components/common/PageShell.jsx'
@@ -7,52 +9,52 @@ import Table from '../../components/common/Table.jsx'
 import StatusBadge from '../../components/common/StatusBadge.jsx'
 import Button from '../../components/common/Button.jsx'
 import { useFetch } from '../../hooks/useFetch.js'
-import { listSalesOrders } from '../../services/sales.service.js'
+import { listVendorBills } from '../../services/purchase.service.js'
 import { formatCurrency, formatDate } from '../../utils/formatters.js'
 import { DOC_STATUS_MAP, toDisplayLabel } from '../../utils/enumMap.js'
 
-const FILTERS = ['All', 'Draft', 'Confirmed']
+const FILTERS = ['All', 'Draft', 'Confirmed', 'Paid']
 
-export default function SalesOrderList() {
+export default function VendorBillList() {
   const [search, setSearch] = useState('')
   const [filter, setFilter] = useState('All')
 
-  const { data, loading, error } = useFetch(listSalesOrders, [])
-  const orders = data ?? []
+  const { data, loading, error } = useFetch(listVendorBills, [])
+  const bills = data ?? []
 
   const filtered = useMemo(() => {
     const term = search.trim().toLowerCase()
-    return orders.filter((o) => {
-      const status = String(o.status ?? 'draft').toLowerCase()
+    return bills.filter((b) => {
+      const status = String(b.status ?? 'draft').toLowerCase()
       const matchesFilter = filter === 'All' || status === filter.toLowerCase()
       if (!matchesFilter) return false
       if (!term) return true
-      const customerName = o.customer_name ?? o.customer?.name ?? ''
-      return [o.reference, customerName].some((field) =>
+      const vendorName = b.vendor_name ?? b.vendor?.name ?? ''
+      return [b.bill_no, b.reference, vendorName].some((field) =>
         String(field ?? '').toLowerCase().includes(term)
       )
     })
-  }, [orders, search, filter])
+  }, [bills, search, filter])
 
   const columns = [
     {
-      key: 'reference',
-      label: 'SO #',
+      key: 'bill_no',
+      label: 'Bill #',
       render: (row) => (
-        <Link className="link-action" to={`/sales/orders/${row.id}`}>
-          {row.reference || `#${row.id}`}
+        <Link className="link-action" to={`/purchases/bills/${row.id}`}>
+          {row.bill_no ?? row.reference ?? `#${row.id}`}
         </Link>
       ),
     },
     {
-      key: 'customer',
-      label: 'Customer',
-      render: (row) => row.customer_name ?? row.customer?.name ?? row.customer_id ?? '—',
+      key: 'vendor',
+      label: 'Vendor',
+      render: (row) => row.vendor_name ?? row.vendor?.name ?? row.vendor_id ?? '—',
     },
     {
-      key: 'so_date',
-      label: 'SO Date',
-      render: (row) => formatDate(row.so_date ?? row.order_date),
+      key: 'bill_date',
+      label: 'Bill Date',
+      render: (row) => formatDate(row.bill_date),
     },
     {
       key: 'total_amount',
@@ -68,20 +70,14 @@ export default function SalesOrderList() {
 
   return (
     <PageShell
-      title="Sales Orders"
-      description="Orders raised with customers, ready to be turned into customer invoices once confirmed."
-      actions={(
-        <>
-          <Link to="/sales/invoices"><Button variant="secondary">View Invoices</Button></Link>
-          <Link to="/sales/orders/new"><Button>New Sales Order</Button></Link>
-        </>
-      )}
+      title="Vendor Bills"
+      description="Bills created from confirmed purchase orders. Confirming a bill posts the accounting entry (Purchase Expense Dr / Creditors Cr)."
     >
       <div className="list-toolbar">
         <input
           className="search-input"
           type="text"
-          placeholder="Search by reference or customer..."
+          placeholder="Search by bill #, reference or vendor..."
           value={search}
           onChange={(e) => setSearch(e.target.value)}
         />
@@ -99,12 +95,12 @@ export default function SalesOrderList() {
         </div>
       </div>
 
-      {loading && <p className="card-empty">Loading sales orders...</p>}
+      {loading && <p className="card-empty">Loading vendor bills...</p>}
       {error && !loading && (
-        <div className="form-error-banner">Could not load sales orders: {error.message}</div>
+        <div className="form-error-banner">Could not load vendor bills: {error.message}</div>
       )}
       {!loading && !error && (
-        <Table columns={columns} rows={filtered} emptyMessage="No sales orders found." />
+        <Table columns={columns} rows={filtered} emptyMessage="No vendor bills found." />
       )}
     </PageShell>
   )

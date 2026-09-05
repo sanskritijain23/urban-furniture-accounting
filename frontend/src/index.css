@@ -8,6 +8,8 @@
   --color-primary-dark: #234840;
   --color-danger: #b3261e;
   --color-danger-bg: #fbeaea;
+  --color-warning: #9a6300;
+  --color-warning-bg: #fdf3d9;
   --sidebar-width: 220px;
   --topbar-height: 60px;
 }
@@ -113,6 +115,19 @@ a {
   background-color: #e8f3ee;
   color: var(--color-primary-dark);
   border: 1px solid #bfe0d2;
+  border-radius: 6px;
+  padding: 10px 12px;
+  font-size: 14px;
+  margin-bottom: 16px;
+}
+
+/* Non-blocking notice, e.g. Budget achieved-amount-over-committed
+   warning. Deliberately distinct from .form-error-banner: it never
+   prevents an action, just flags something worth a look. */
+.form-warning-banner {
+  background-color: var(--color-warning-bg);
+  color: var(--color-warning);
+  border: 1px solid #f0dfa6;
   border-radius: 6px;
   padding: 10px 12px;
   font-size: 14px;
@@ -266,6 +281,82 @@ a {
 .card .card-empty {
   color: var(--color-text-muted);
   font-size: 14px;
+}
+
+/* Dashboard (Checkpoint: functional MVP dashboard) */
+
+.dashboard-section {
+  margin-top: 28px;
+}
+
+.dashboard-section:first-of-type {
+  margin-top: 8px;
+}
+
+.dashboard-section-title {
+  font-size: 15px;
+  font-weight: 700;
+  margin: 0 0 12px;
+  color: var(--color-text);
+}
+
+.kpi-card .kpi-label {
+  font-size: 13px;
+  color: var(--color-text-muted);
+  margin-bottom: 6px;
+}
+
+.kpi-card .kpi-value,
+.card-link .kpi-value {
+  font-size: 22px;
+  font-weight: 700;
+}
+
+.kpi-value-positive {
+  color: var(--color-primary-dark);
+}
+
+.kpi-value-negative {
+  color: var(--color-danger);
+}
+
+.kpi-sub {
+  font-size: 12px;
+  color: var(--color-text-muted);
+  margin-top: 4px;
+}
+
+.card-link {
+  text-decoration: none;
+  color: inherit;
+  display: block;
+  transition: border-color 0.15s ease;
+}
+
+.card-link:hover {
+  border-color: var(--color-primary);
+}
+
+.quick-actions-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 12px;
+}
+
+.quick-action-hint {
+  font-size: 12px;
+  opacity: 0.8;
+}
+
+.demo-data-note {
+  font-size: 13px;
+  color: var(--color-text-muted);
+  font-style: italic;
+  background-color: var(--color-warning-bg);
+  border: 1px solid var(--color-border);
+  border-radius: 6px;
+  padding: 10px 14px;
+  margin: 12px 0 0;
 }
 
 /* Master data list/form pages (Contacts, Products, Accounts, Journals,
@@ -438,6 +529,114 @@ th, td {
   background-color: var(--color-bg);
 }
 
+.status-draft {
+  background-color: #eef0f3;
+  color: var(--color-text-muted);
+}
+
+.status-confirmed {
+  background-color: #e8f3ee;
+  color: var(--color-primary-dark);
+}
+
+.status-paid {
+  background-color: #e6f0fb;
+  color: #1d4ed8;
+}
+
+.status-cancelled {
+  background-color: var(--color-danger-bg);
+  color: var(--color-danger);
+}
+
+.status-revised {
+  background-color: var(--color-warning-bg);
+  color: var(--color-warning);
+}
+
+.status-posted {
+  background-color: #e8f3ee;
+  color: var(--color-primary-dark);
+}
+
+.status-balanced {
+  background-color: #e8f3ee;
+  color: var(--color-primary-dark);
+}
+
+.status-unbalanced {
+  background-color: var(--color-danger-bg);
+  color: var(--color-danger);
+}
+
+.year-filter {
+  margin-bottom: 0;
+}
+
+.year-filter select {
+  min-width: 110px;
+}
+
+/* Purchase / Sales document detail pages (PO, Vendor Bill, SO, Invoice) */
+
+.detail-card {
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: 8px;
+  padding: 24px;
+  margin-bottom: 16px;
+}
+
+.detail-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  gap: 16px;
+  margin-bottom: 8px;
+}
+
+.detail-field-label {
+  font-size: 12px;
+  color: var(--color-text-muted);
+  margin-bottom: 2px;
+}
+
+.detail-field-value {
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.line-items-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 12px 0;
+}
+
+.line-items-table th,
+.line-items-table td {
+  text-align: left;
+  padding: 8px 10px;
+  border-bottom: 1px solid var(--color-border);
+  font-size: 14px;
+}
+
+.line-items-table input,
+.line-items-table select {
+  width: 100%;
+  padding: 6px 8px;
+  border: 1px solid var(--color-border);
+  border-radius: 4px;
+  font-size: 14px;
+}
+
+.line-items-total-row td {
+  font-weight: 700;
+  border-bottom: none;
+}
+
+.text-right {
+  text-align: right;
+}
+
 .modal-backdrop {
   position: fixed;
   inset: 0;
@@ -452,4 +651,12 @@ th, td {
   border-radius: 8px;
   padding: 24px;
   min-width: 320px;
+}
+
+/* Contact Portal — reuses .topbar/.app-content from the admin layout,
+   just without the sidebar, since contacts get no master-data nav. */
+.portal-layout {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
 }

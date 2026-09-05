@@ -7,9 +7,11 @@ import BudgetRoutes from './routes/budget.routes.jsx'
 import ReportsRoutes from './routes/reports.routes.jsx'
 import PortalRoutes from './routes/portal.routes.jsx'
 import ProtectedRoute from './routes/ProtectedRoute.jsx'
+import AdminRoute from './routes/AdminRoute.jsx'
 
 import AppLayout from './layouts/AppLayout.jsx'
 import Dashboard from './pages/dashboard/Dashboard.jsx'
+import AdminCreateUser from './pages/auth/AdminCreateUser.jsx'
 
 /**
  * Root router. Split into per-domain route files under src/routes/
@@ -32,8 +34,15 @@ export default function App() {
           {TransactionsRoutes}
           {BudgetRoutes}
           {ReportsRoutes}
+          <Route element={<AdminRoute />}>
+            <Route path="/admin/users/new" element={<AdminCreateUser />} />
+          </Route>
         </Route>
       </Route>
+      {/* Unknown paths fall back to /dashboard, which itself redirects
+          unauthenticated users to /login and contacts to /portal — so
+          this one route covers every role sensibly. */}
+      <Route path="*" element={<Navigate to="/dashboard" replace />} />
     </Routes>
   )
 }

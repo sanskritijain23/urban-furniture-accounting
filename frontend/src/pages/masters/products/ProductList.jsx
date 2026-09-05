@@ -97,7 +97,12 @@ export default function ProductList() {
     <PageShell
       title="Products"
       description="Goods and services sold or purchased."
-      actions={<Link to="/products/new"><Button>Add Product</Button></Link>}
+      actions={(
+        <>
+          <Link to="/products/categories"><Button variant="secondary">Manage Categories</Button></Link>
+          <Link to="/products/new"><Button>Add Product</Button></Link>
+        </>
+      )}
     >
       <div className="list-toolbar">
         <input
